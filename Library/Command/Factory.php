@@ -23,7 +23,7 @@
  */
 class Library_Command_Factory
 {
-    private static $_object = array();
+    private static array $_object = [];
 
     # No explicit call of constructor
     private function __construct()
@@ -40,7 +40,7 @@ class Library_Command_Factory
      *
      * @return void
      */
-    public static function instance($command)
+    public static function instance(string $command): Library_Command_Server|Library_Command_Memcache|Library_Command_Memcached
     {
         # Importing configuration
         $_ini = Library_Configuration_Loader::singleton();
@@ -79,7 +79,7 @@ class Library_Command_Factory
      *
      * @return void
      */
-    public static function api($api)
+    public static function api(string $api): Library_Command_Server|Library_Command_Memcache|Library_Command_Memcached
     {
         # Instance does not exists
         if (! isset(self::$_object[$api]) || ($api != 'Server')) {
@@ -108,3 +108,5 @@ class Library_Command_Factory
         return self::$_object[$api];
     }
 }
+
+

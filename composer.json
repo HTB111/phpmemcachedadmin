@@ -9,5 +9,8 @@
             "email": "elijaa@free.fr"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^8.0"
+    }
 }
+

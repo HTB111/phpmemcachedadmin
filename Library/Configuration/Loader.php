@@ -30,7 +30,8 @@ class Library_Configuration_Loader
     protected static $_iniPath = './Config/Memcache.php';
 
     # Configuration needed keys and default values
-    protected static $_iniKeys = array('stats_api' => 'Server',
+    protected static array $_iniKeys = [
+        'stats_api' => 'Server',
         'slabs_api' => 'Server',
         'items_api' => 'Server',
         'get_api' => 'Server',
@@ -44,10 +45,11 @@ class Library_Configuration_Loader
         'hit_rate_alert' => 90,
         'eviction_alert' => 0,
         'file_path' => 'Temp/',
-        'servers' => array('Default' => array('127.0.0.1:11211' => array('hostname' => '127.0.0.1', 'port' => 11211))));
+        'servers' => ['Default' => ['127.0.0.1:11211' => ['hostname' => '127.0.0.1', 'port' => 11211]]]
+    ];
 
     # Storage
-    protected static $_ini = array();
+    protected static array $_ini = [];
 
     /**
      * Constructor, load configuration file and parse server list
@@ -71,7 +73,7 @@ class Library_Configuration_Loader
      *
      * @return Library_Configuration_Loader
      */
-    public static function singleton()
+    public static function singleton(): self
     {
         if (! isset(self::$_instance)) {
             self::$_instance = new self();
@@ -87,7 +89,7 @@ class Library_Configuration_Loader
      *
      * @return Mixed
      */
-    public function get($key)
+    public function get(string $key): mixed
     {
         if (isset(self::$_ini[$key])) {
             return self::$_ini[$key];
@@ -103,12 +105,12 @@ class Library_Configuration_Loader
      *
      * @return Array
      */
-    public function cluster($cluster)
+    public function cluster(string $cluster): array
     {
         if (isset(self::$_ini['servers'][$cluster])) {
             return self::$_ini['servers'][$cluster];
         }
-        return array();
+        return [];
     }
 
     /**
@@ -119,14 +121,14 @@ class Library_Configuration_Loader
      *
      * @return Array
      */
-    public function server($server)
+    public function server(string $server): array
     {
         foreach (self::$_ini['servers'] as $cluster => $servers) {
             if (isset(self::$_ini['servers'][$cluster][$server])) {
                 return self::$_ini['servers'][$cluster][$server];
             }
         }
-        return array();
+        return [];
     }
 
     /**
@@ -137,7 +139,7 @@ class Library_Configuration_Loader
      *
      * @return Boolean
      */
-    public function set($key, $value)
+    public function set(string $key, mixed $value): void
     {
         self::$_ini[$key] = $value;
     }
@@ -147,7 +149,7 @@ class Library_Configuration_Loader
      *
      * @return String
      */
-    public function path()
+    public function path(): string
     {
         return self::$_iniPath;
     }
@@ -158,7 +160,7 @@ class Library_Configuration_Loader
      *
      * @return Boolean
      */
-    public function check()
+    public function check(): bool
     {
         # Checking configuration keys
         foreach (array_keys(self::$_iniKeys) as $iniKey) {
@@ -176,7 +178,7 @@ class Library_Configuration_Loader
      *
      * @return Boolean
      */
-    public function write()
+    public function write(): bool
     {
         if ($this->check()) {
             return is_numeric(file_put_contents(self::$_iniPath, '<?php' . PHP_EOL . 'return ' . var_export(self::$_ini, true) . ';'));
@@ -184,3 +186,10 @@ class Library_Configuration_Loader
         return false;
     }
 }
+
+
+
+
+
+
+

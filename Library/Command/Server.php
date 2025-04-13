@@ -50,7 +50,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return String|Boolean
      */
-    public function exec($command, $server, $port)
+    public function exec(string $command, string $server, int $port): string|bool
     {
         # Variables
         $buffer = '';
@@ -108,7 +108,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return Boolean
      */
-    private function end($buffer, $command)
+    private function end(string $buffer, string $command): bool
     {
         # incr or decr also return integer
         if ((preg_match('/^(incr|decr)/', $command))) {
@@ -132,10 +132,10 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return Array
      */
-    public function parse($string, $stats = true)
+    public function parse(string $string, bool $stats = true): array
     {
         # Variable
-        $return = array();
+        $return = [];
 
         # Exploding by \r\n
         $lines = preg_split('/\r\n/', $string);
@@ -155,7 +155,7 @@ class Library_Command_Server implements Library_Command_Interface
             foreach ($lines as $line) {
                 $data = preg_split('/ /', $line);
                 if (isset($data[1])) {
-                    $return[$data[1]] = array(substr($data[2], 1), $data[4]);
+                    $return[$data[1]] = [$data[2], $data[4]];
                 }
             }
         }
@@ -171,7 +171,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return Array|Boolean
      */
-    public function stats($server, $port)
+    public function stats(string $server, int $port): array|bool
     {
         # Executing command
         if (($return = $this->exec('stats', $server, $port))) {
@@ -189,7 +189,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return Array|Boolean
      */
-    public function settings($server, $port)
+    public function settings(string $server, int $port): array|bool
     {
         # Executing command
         if (($return = $this->exec('stats settings', $server, $port))) {
@@ -207,10 +207,10 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return Array|Boolean
      */
-    public function slabs($server, $port)
+    public function slabs(string $server, int $port): array|bool
     {
         # Initializing
-        $slabs = array();
+        $slabs = [];
 
         # Finding uptime
         $stats = $this->stats($server, $port);
@@ -259,7 +259,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return Array|Boolean
      */
-    public function items($server, $port, $slab)
+    public function items(string $server, int $port, int $slab): array|bool
     {
         # Initializing
         $items = false;
@@ -282,12 +282,12 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return String
      */
-    public function get($server, $port, $key)
+    public function get(string $server, int $port, string $key): string
     {
         # Executing command : get
         if (($string = $this->exec('get ' . $key, $server, $port))) {
             $string = preg_replace('/^VALUE ' . preg_quote($key, '/') . '[0-9 ]*\r\n/', '', $string);
-            if (ord($string[0]) == 0x78 && in_array(ord($string[1]), array(0x01, 0x5e, 0x9c, 0xda))) {
+            if (ord($string[0]) == 0x78 && in_array(ord($string[1]), [0x01, 0x5e, 0x9c, 0xda])) {
                 return gzuncompress($string);
             }
             return $string;
@@ -307,7 +307,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return String
      */
-    function set($server, $port, $key, $data, $duration)
+    public function set(string $server, int $port, string $key, mixed $data, int $duration): string
     {
         # Formatting data
         $data = preg_replace('/\r/', '', $data);
@@ -329,7 +329,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return String
      */
-    public function delete($server, $port, $key)
+    public function delete(string $server, int $port, string $key): string
     {
         # Executing command : delete
         if (($result = $this->exec('delete ' . $key, $server, $port))) {
@@ -349,7 +349,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return String
      */
-    function increment($server, $port, $key, $value)
+    public function increment(string $server, int $port, string $key, int $value): string
     {
         # Executing command : increment
         if (($result = $this->exec('incr ' . $key . ' ' . $value, $server, $port))) {
@@ -369,7 +369,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return String
      */
-    function decrement($server, $port, $key, $value)
+    public function decrement(string $server, int $port, string $key, int $value): string
     {
         # Executing command : decrement
         if (($result = $this->exec('decr ' . $key . ' ' . $value, $server, $port))) {
@@ -388,7 +388,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return String
      */
-    function flush_all($server, $port, $delay)
+    public function flush_all(string $server, int $port, int $delay): string
     {
         # Executing command : flush_all
         if (($result = $this->exec('flush_all ' . $delay, $server, $port))) {
@@ -409,9 +409,9 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return array
      */
-    function search($server, $port, $search, $level = false, $more = false)
+    public function search(string $server, int $port, string $search, bool|string $level = false, bool|string $more = false): array|bool
     {
-        $slabs = array();
+        $slabs = [];
         $items = false;
 
         # Executing command : stats
@@ -475,7 +475,7 @@ class Library_Command_Server implements Library_Command_Interface
      *
      * @return String
      */
-    function telnet($server, $port, $command)
+    public function telnet(string $server, int $port, string $command): string
     {
         # Executing command
         if (($result = $this->exec($command, $server, $port))) {
@@ -484,3 +484,20 @@ class Library_Command_Server implements Library_Command_Interface
         return self::$_log;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
