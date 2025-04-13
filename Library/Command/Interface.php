@@ -38,7 +38,7 @@ interface Library_Command_Interface
      *
      * @return Array|Boolean
      */
-    function stats($server, $port);
+    function stats(string $server, int $port): array|bool;
 
     /**
      * Send stats settings command to server
@@ -49,7 +49,7 @@ interface Library_Command_Interface
      *
      * @return Array|Boolean
      */
-    public function settings($server, $port);
+    public function settings(string $server, int $port): array|bool;
 
     /**
      * Retrieve slabs stats
@@ -60,7 +60,7 @@ interface Library_Command_Interface
      *
      * @return Array|Boolean
      */
-    function slabs($server, $port);
+    function slabs(string $server, int $port): array|bool;
 
     /**
      * Retrieve items from a slabs
@@ -72,7 +72,7 @@ interface Library_Command_Interface
      *
      * @return Array|Boolean
      */
-    function items($server, $port, $slab);
+    function items(string $server, int $port, int $slab): array|bool;
 
     /**
      * Send get command to server to retrieve an item
@@ -84,7 +84,7 @@ interface Library_Command_Interface
      *
      * @return String
      */
-    function get($server, $port, $key);
+    function get(string $server, int $port, string $key): string;
 
     /**
      * Set an item
@@ -98,7 +98,7 @@ interface Library_Command_Interface
      *
      * @return String
      */
-    function set($server, $port, $key, $data, $duration);
+    function set(string $server, int $port, string $key, mixed $data, int $duration): string;
 
     /**
      * Delete an item
@@ -110,7 +110,7 @@ interface Library_Command_Interface
      *
      * @return String
      */
-    function delete($server, $port, $key);
+    function delete(string $server, int $port, string $key): string;
 
     /**
      * Increment the key by value
@@ -123,7 +123,7 @@ interface Library_Command_Interface
      *
      * @return String
      */
-    function increment($server, $port, $key, $value);
+    function increment(string $server, int $port, string $key, int $value): string;
 
     /**
      * Decrement the key by value
@@ -136,7 +136,7 @@ interface Library_Command_Interface
      *
      * @return String
      */
-    function decrement($server, $port, $key, $value);
+    function decrement(string $server, int $port, string $key, int $value): string;
 
     /**
      * Flush all items on a server after delay
@@ -148,7 +148,7 @@ interface Library_Command_Interface
      *
      * @return String
      */
-    function flush_all($server, $port, $delay);
+    function flush_all(string $server, int $port, int $delay): string;
 
     /**
      * Search for item
@@ -162,7 +162,7 @@ interface Library_Command_Interface
      *
      * @return array
      */
-    function search($server, $port, $search, $level = false, $more = false);
+    function search(string $server, int $port, string $search, bool|string $level = false, bool|string $more = false): array|bool;
 
     /**
      * Execute a telnet command on a server
@@ -174,5 +174,17 @@ interface Library_Command_Interface
      *
      * @return String
      */
-    function telnet($server, $port, $command);
+    function telnet(string $server, int $port, string $command): string;
 }
+
+
+
+
+
+
+
+
+
+
+
+
