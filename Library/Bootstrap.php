@@ -7,8 +7,19 @@ header('Cache-Control: no-cache, must-revalidate');
 define('CURRENT_VERSION', '1.3.0');
 
 # XSS / User input check
+function sanitizeInput($data) {
+    if (is_array($data)) {
+        $sanitized = array();
+        foreach ($data as $key => $value) {
+            $sanitized[$key] = sanitizeInput($value);
+        }
+        return $sanitized;
+    }
+    return htmlentities((string)$data, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+}
+
 foreach ($_REQUEST as $index => $data) {
-    $_REQUEST[$index] = htmlentities($data, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $_REQUEST[$index] = sanitizeInput($data);
 }
 
 # Autoloader
@@ -21,4 +32,5 @@ $_ini = Library_Configuration_Loader::singleton();
 
 # Date timezone
 date_default_timezone_set('Europe/Paris');
+
 
